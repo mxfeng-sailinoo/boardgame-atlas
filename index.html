@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BoardGame Atlas 桌遊規則搜尋網站，快速查詢 UNO、狼人殺、撲克等桌遊玩法。">
+  <title>BoardGame Atlas | 桌遊規則探索指南</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <!-- 導覽列 -->
+  <header class="navbar">
+    <a class="brand" href="#" aria-label="BoardGame Atlas 首頁">
+      <span class="brand-icon">🎲</span>
+      <span>BoardGame <strong>Atlas</strong></span>
+    </a>
+
+    <nav class="nav-links" aria-label="主要導覽">
+      <a href="#explore">探索桌遊</a>
+      <button id="favoritesNav" class="nav-button" type="button">
+        ♡ 我的收藏
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="floating-card card-one" aria-hidden="true">♥</div>
+      <div class="floating-card card-two" aria-hidden="true">♠</div>
+      <div class="floating-card card-three" aria-hidden="true">UNO</div>
+      <div class="floating-card card-four" aria-hidden="true">🌙</div>
+
+      <div class="hero-content">
+        <span class="eyebrow">✦ YOUR BOARD GAME COMPANION ✦</span>
+        <h1>
+          每一場好玩的遊戲，<br>
+          都從<span class="highlight">懂規則</span>開始！
+        </h1>
+        <p>
+          UNO 怎麼玩？狼人殺怎麼當法官？<br>
+          不用再翻厚厚的說明書，快速找到你需要的桌遊規則。
+        </p>
+
+        <div class="search-box">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="搜尋桌遊，例如：UNO、狼人殺、撲克..."
+            aria-label="搜尋桌遊名稱"
+          >
+          <button id="searchButton" type="button">搜尋規則 →</button>
+        </div>
+
+        <div class="quick-search">
+          <span>熱門搜尋：</span>
+          <button type="button" data-search="UNO">UNO</button>
+          <button type="button" data-search="狼人殺">狼人殺</button>
+          <button type="button" data-search="撲克">撲克</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 探索區 -->
+    <section class="explore section-container" id="explore">
+      <div class="section-heading">
+        <div>
+          <span class="section-label">EXPLORE THE GAMES</span>
+          <h2>探索桌遊世界 <span>✦</span></h2>
+          <p>找到你的下一場遊戲，和朋友一起享受歡樂時光。</p>
+        </div>
+
+        <button id="randomButton" class="random-btn" type="button">
+          🎲 隨機推薦
+        </button>
+      </div>
+
+      <!-- 分類 -->
+      <div class="filters" id="categoryFilters" aria-label="桌遊分類">
+        <button class="filter-btn active" data-category="all" type="button">全部遊戲</button>
+        <button class="filter-btn" data-category="card" type="button">🃏 卡牌遊戲</button>
+        <button class="filter-btn" data-category="party" type="button">🎉 派對遊戲</button>
+        <button class="filter-btn" data-category="deduction" type="button">🔍 推理遊戲</button>
+        <button class="filter-btn" data-category="strategy" type="button">♟️ 策略遊戲</button>
+      </div>
+
+      <div class="results-line">
+        <p id="resultCount" aria-live="polite">正在載入遊戲...</p>
+        <button id="clearButton" class="clear-btn" type="button">
+          清除篩選
+        </button>
+      </div>
+
+      <!-- JS 產生卡片 -->
+      <div id="gameGrid" class="game-grid"></div>
+
+      <div id="emptyState" class="empty-state" hidden>
+        <div>🔎</div>
+        <h3>找不到符合的桌遊</h3>
+        <p>試試其他關鍵字，或清除搜尋條件。</p>
+      </div>
+    </section>
+
+    <!-- 底部介紹 -->
+    <section class="about-section">
+      <div class="section-container about-content">
+        <div class="about-emoji">🎴 🎲 🌙</div>
+        <h2>準備好開始下一場遊戲了嗎？</h2>
+        <p>查規則、找靈感、收藏喜歡的遊戲。</p>
+        <a href="#explore" class="about-button">開始探索 ↑</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 BoardGame Atlas · Made with ♡ & Vibe Coding</p>
+    <p>規則僅供快速學習，實際玩法以各遊戲版本與官方說明為準。</p>
+  </footer>
+
+  <!-- 遊戲規則視窗 -->
+  <dialog id="gameDialog" class="game-dialog" aria-labelledby="dialogTitle">
+    <div class="dialog-inner">
+      <button
+        id="closeDialog"
+        class="close-dialog"
+        type="button"
+        aria-label="關閉遊戲規則"
+      >×</button>
+
+      <div id="dialogHero" class="dialog-hero">
+        <div id="dialogEmoji" class="dialog-emoji"></div>
+        <div>
+          <span id="dialogCategory" class="dialog-category"></span>
+          <h2 id="dialogTitle"></h2>
+          <p id="dialogDescription"></p>
+        </div>
+      </div>
+
+      <div id="dialogMeta" class="dialog-meta"></div>
+
+      <div class="rule-tabs" role="tablist" aria-label="規則分類">
+        <button class="rule-tab active" data-tab="setup" type="button" role="tab">遊戲準備</button>
+        <button class="rule-tab" data-tab="rules" type="button" role="tab">遊戲玩法</button>
+        <button class="rule-tab" data-tab="winning" type="button" role="tab">勝利條件</button>
+        <button class="rule-tab" data-tab="tips" type="button" role="tab">注意事項</button>
+      </div>
+
+      <div id="ruleContent" class="rule-content" role="tabpanel"></div>
+
+      <div class="dialog-actions">
+        <button id="dialogFavorite" class="favorite-action" type="button">
+          ♡ 加入收藏
+        </button>
+        <button id="dialogDone" class="done-action" type="button">
+          我學會了 ✓
+        </button>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>
